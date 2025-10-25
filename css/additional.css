@@ -280,6 +280,25 @@ html.dark #finalResult {
     color: var(--primary-color);
 }
 
+/* Make sure visualization area and its children are not clipped in dark mode
+   (some toggle/animation rules use max-height/overflow which may hide content). */
+html.dark .visualization-section,
+html.dark .visualization-section .result-box,
+html.dark #crcSteps,
+html.dark #crcSteps .step,
+html.dark .visualization-section .step {
+    overflow: visible !important;
+    max-height: none !important;
+    color: var(--primary-color) !important;
+}
+
+/* Ensure each step remains readable and keeps its padded box in dark mode */
+html.dark .step {
+    background: rgba(255,255,255,0.02) !important;
+    border-left-color: var(--secondary-color) !important;
+    box-shadow: none !important;
+}
+
 /* Error simulation container itself should follow the dark theme */
 html.dark .error-simulation,
 html.dark .error-simulation .message-comparison,
