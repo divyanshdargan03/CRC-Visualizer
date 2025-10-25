@@ -413,6 +413,22 @@ html.dark textarea {
     border-color: rgba(255,255,255,0.06) !important;
 }
 
+/* Ensure focused inputs in dark mode don't switch to a bright white background */
+html.dark input[type="text"]:focus,
+html.dark select:focus,
+html.dark textarea:focus {
+    background: rgba(255,255,255,0.03) !important;
+    color: var(--primary-color) !important;
+    border-color: rgba(154,124,255,0.9) !important; /* keep accent but darker */
+    box-shadow: 0 0 0 3px rgba(124,77,255,0.08) !important;
+}
+
+/* Placeholder text should be visible in dark mode */
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+    color: rgba(230,238,248,0.6) !important;
+}
+
 /* Ensure the native dropdown list shows dark background and readable options
    (note: option styling is limited across browsers but this helps most cases) */
 html.dark select option {
@@ -426,4 +442,40 @@ html.dark .verify-btn,
 html.dark .primary-btn,
 html.dark .secondary-btn {
     color: white;
+}
+
+/* Strong overrides for stubborn white areas in dark mode. Using !important because
+   some rules in other files set plain 'background: white' and load after styles.css.
+   These selectors target the result/error-simulation area shown in screenshots. */
+html.dark .result-box,
+html.dark #errorResult,
+html.dark .result-box .error-simulation,
+html.dark .result-box .error-simulation .message-comparison,
+html.dark .result-box .error-simulation .binary-display,
+html.dark .error-simulation,
+html.dark .message-comparison,
+html.dark .binary-display {
+    background: rgba(255,255,255,0.02) !important;
+    color: var(--primary-color) !important;
+    border-color: rgba(255,255,255,0.04) !important;
+}
+
+/* Ensure the success / error semantics remain visible */
+html.dark .success {
+    color: var(--success-color) !important;
+}
+html.dark .error {
+    color: var(--error-color) !important;
+}
+
+/* Force the verification-result box to use themed background but keep tint */
+html.dark .verification-result.success {
+    background: rgba(0,200,83,0.06) !important;
+    color: var(--success-color) !important;
+    border-left-color: var(--success-color) !important;
+}
+html.dark .verification-result.error {
+    background: rgba(255,23,68,0.06) !important;
+    color: var(--error-color) !important;
+    border-left-color: var(--error-color) !important;
 }

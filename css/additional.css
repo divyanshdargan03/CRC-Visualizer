@@ -228,3 +228,85 @@ body {
 .input-highlight {
     animation: inputHighlight 1s ease;
 }
+
+/* Dark-mode overrides (loaded after styles.css) to ensure correct contrast
+   for components defined in this file when html.dark is active. */
+html.dark .note,
+html.dark .verification-info,
+html.dark .message-comparison,
+html.dark .binary-display,
+html.dark .encoded-message,
+html.dark .step,
+html.dark .result-group,
+html.dark .message-row {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.06);
+    color: var(--primary-color);
+}
+
+/* Keep changed/bit highlight colors readable */
+html.dark .bit {
+    background: rgba(124,181,236,0.12);
+    color: var(--secondary-color);
+}
+html.dark .bit-changed {
+    background: rgba(255,100,100,0.08);
+    color: var(--error-color);
+}
+
+/* Verification/result box styling: preserve green for success, red for error */
+html.dark .verification-result {
+    background: rgba(255,255,255,0.02);
+    color: var(--primary-color);
+    border-left-color: rgba(255,255,255,0.06);
+}
+html.dark .verification-result.success {
+    background: rgba(0,200,83,0.08);
+    border-left-color: var(--success-color);
+    color: var(--success-color);
+}
+html.dark .verification-result.error {
+    background: rgba(255,23,68,0.06);
+    border-left-color: var(--error-color);
+    color: var(--error-color);
+}
+
+/* Make polynomial and binary visualization text visible */
+html.dark #polyMath,
+html.dark #polyBinary,
+html.dark #binaryConversion,
+html.dark #crcSteps,
+html.dark #finalResult {
+    color: var(--primary-color);
+}
+
+/* Error simulation container itself should follow the dark theme */
+html.dark .error-simulation,
+html.dark .error-simulation .message-comparison,
+html.dark .error-simulation .message-row,
+html.dark .error-simulation .binary-display,
+html.dark .error-simulation .message-comparison {
+    background: rgba(255,255,255,0.02);
+    color: var(--primary-color);
+    border-color: rgba(255,255,255,0.04);
+}
+
+/* Restore green/red semantic color for success/error messages in final result */
+html.dark .success {
+    color: var(--success-color) !important;
+}
+html.dark .error {
+    color: var(--error-color) !important;
+}
+
+/* Ensure verification-result keeps green background tint but matches theme */
+html.dark .verification-result.success {
+    background: rgba(0,200,83,0.06);
+    color: var(--success-color);
+    border-left-color: var(--success-color);
+}
+html.dark .verification-result.error {
+    background: rgba(255,23,68,0.06);
+    color: var(--error-color);
+    border-left-color: var(--error-color);
+}
