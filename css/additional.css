@@ -172,6 +172,12 @@ select:disabled {
     visibility: visible;
 }
 
+/* Ensure when an element is shown via the smooth-toggle helper it can display
+   overflowing child content (prevents clipping of long visualization steps). */
+.smooth-toggle.smooth-shown {
+    overflow: visible !important;
+}
+
 /* Small utility to reduce abrupt layout jumps for sections */
 .section-card {
     transition: box-shadow 0.25s ease, transform 0.25s ease;
@@ -297,6 +303,24 @@ html.dark .step {
     background: rgba(255,255,255,0.02) !important;
     border-left-color: var(--secondary-color) !important;
     box-shadow: none !important;
+}
+
+/* Apply the same non-clipping/visibility fixes for light mode as well so the
+   visualization and steps are visible regardless of theme. */
+.visualization-section,
+#crcSteps,
+.visualization-section .result-box,
+.visualization-section .step,
+#crcSteps .step {
+    overflow: visible !important;
+    max-height: none !important;
+    color: var(--primary-color) !important;
+}
+
+.step {
+    background: linear-gradient(135deg, #ffffff, #f8f9fa) !important;
+    border-left-color: var(--accent-color) !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
 }
 
 /* Error simulation container itself should follow the dark theme */
