@@ -375,3 +375,55 @@ html.dark .step {
     background: rgba(255,255,255,0.02);
     border-left-color: var(--secondary-color);
 }
+
+/* Additional dark-mode overrides to fix contrast for elements that used hard-coded
+   light backgrounds in other CSS files (additional.css / scroll.css). These make
+   dropdowns, result blocks and inline "white" cards readable in dark theme. */
+html.dark .step,
+html.dark .step:hover,
+html.dark .step:nth-child(even) {
+    background: rgba(255,255,255,0.02);
+    box-shadow: none;
+    color: var(--primary-color);
+}
+
+html.dark .encoded-message,
+html.dark .binary-display,
+html.dark .message-comparison,
+html.dark .verification-info,
+html.dark .verification-result,
+html.dark .message-row,
+html.dark .result-group,
+html.dark .copy-btn,
+html.dark .verification-result.success,
+html.dark .verification-result.error {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.05);
+    color: var(--primary-color);
+}
+
+/* Make inputs/selects and disabled states readable */
+html.dark input[type="text"],
+html.dark select,
+html.dark input:disabled,
+html.dark select:disabled,
+html.dark textarea {
+    background: rgba(255,255,255,0.03) !important;
+    color: var(--primary-color) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+}
+
+/* Ensure the native dropdown list shows dark background and readable options
+   (note: option styling is limited across browsers but this helps most cases) */
+html.dark select option {
+    background: rgba(8,12,20,0.98);
+    color: var(--primary-color);
+}
+
+/* Keep copy/verify buttons visible */
+html.dark .copy-btn,
+html.dark .verify-btn,
+html.dark .primary-btn,
+html.dark .secondary-btn {
+    color: white;
+}
