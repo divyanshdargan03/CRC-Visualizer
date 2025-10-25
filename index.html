@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRC Visualizer</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional.css">
+    <link rel="stylesheet" href="css/scroll.css">
+</head>
+<body>
+    <div class="container">
+        <div id="topSection">
+            <div class="top-row">
+                <h1>CRC Visualizer</h1>
+                <div class="header-controls">
+                    <div class="theme-toggle">
+                        <input type="checkbox" id="themeToggle" aria-label="Toggle dark mode">
+                        <label for="themeToggle" class="toggle-label" title="Toggle dark mode">
+                            <span class="toggle-knob">
+                                <!-- Sun icon (circle + rays group for rotation) -->
+                                <svg class="icon sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                                    <g class="sun-rays" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+                                        <path d="M12 2.5v2.5" />
+                                        <path d="M12 19v2.5" />
+                                        <path d="M4.5 5.5l1.8 1.8" />
+                                        <path d="M17.7 16.7l1.8 1.8" />
+                                        <path d="M2.5 12h2.5" />
+                                        <path d="M19 12h2.5" />
+                                        <path d="M4.5 18.5l1.8-1.8" />
+                                        <path d="M17.7 7.3l1.8-1.8" />
+                                    </g>
+                                    <circle cx="12" cy="12" r="4" fill="currentColor" />
+                                </svg>
+                                <!-- Moon icon (crescent) -->
+                                <svg class="icon moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                                    <path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                                </svg>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-meta">
+                <div><strong>Project:</strong> CRC Visualizer — Computer Networks</div>
+                <div><strong>Student:</strong> Divyansh Dargan (Reg: 24BCE5131)</div>
+                <div><strong>Professor:</strong> Dr. Swaminathan A</div>
+            </div>
+        
+        <div class="input-section">
+            <div class="form-group">
+                <label for="inputFormat">Input Format:</label>
+                <select id="inputFormat">
+                    <option value="binary">Binary</option>
+                    <option value="decimal">Decimal</option>
+                    <option value="hex">Hexadecimal</option>
+                    <option value="ascii">ASCII</option>
+                    <option value="text">Text</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="inputData">Input Data:</label>
+                <input type="text" id="inputData" placeholder="Enter your data">
+            </div>
+
+            <div class="form-group">
+                <label for="polynomialType">Generator Polynomial:</label>
+                <select id="polynomialType">
+                    <option value="custom">Custom</option>
+                    <option value="crc8">CRC-8 (x⁸ + x² + x + 1)</option>
+                    <option value="crc16">CRC-16 (x¹⁶ + x¹⁵ + x² + 1)</option>
+                    <option value="crc32">CRC-32 (x³² + x²⁶ + x²³ + x²² + x¹⁶ + x¹² + x¹¹ + x¹⁰ + x⁸ + x⁷ + x⁵ + x⁴ + x² + x + 1)</option>
+                </select>
+            </div>
+
+            <div id="customPolyDiv" class="form-group">
+                <label for="customPoly">Custom Polynomial (binary):</label>
+                <input type="text" id="customPoly" placeholder="e.g., 1011 for x³ + x + 1">
+            </div>
+
+            <div class="form-group">
+                <label for="mode">Mode:</label>
+                <select id="mode">
+                    <option value="sender">Sender (Encode)</option>
+                    <option value="receiver">Receiver (Verify)</option>
+                </select>
+            </div>
+
+            <button id="calculate" class="primary-btn">Calculate CRC</button>
+        </div>
+
+        <div class="visualization-section">
+            <h2>Binary Conversion</h2>
+            <div id="binaryConversion" class="result-box"></div>
+
+            <h2>CRC Calculation Steps</h2>
+            <div id="crcSteps" class="result-box"></div>
+
+            <h2>Final Result</h2>
+            <div id="finalResult" class="result-box"></div>
+        </div>
+
+        <div class="error-simulation-section">
+            <h2>Error Simulation</h2>
+            <div class="form-group">
+                <label for="errorType">Error Type:</label>
+                <select id="errorType">
+                    <option value="single">Single-bit Error</option>
+                    <option value="double">Double-bit Error</option>
+                    <option value="burst">Burst Error</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bitPosition">Bit Position(s):</label>
+                <input type="text" id="bitPosition" placeholder="e.g., 3 or 1,4 for multiple positions">
+            </div>
+            <button id="simulateError" class="secondary-btn">Simulate Error</button>
+            <div id="errorResult" class="result-box"></div>
+        </div>
+
+        <div id="polynomialVisual" class="polynomial-section">
+            <h2>Polynomial Visualization</h2>
+            <div class="result-box">
+                <div id="polyMath"></div>
+                <div id="polyBinary"></div>
+            </div>
+        </div>
+    </div>
+    <script src="js/crc.js"></script>
+</body>
+</html>
