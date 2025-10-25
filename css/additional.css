@@ -1,0 +1,230 @@
+.note {
+    color: #666;
+    font-style: italic;
+    display: block;
+    margin-top: 8px;
+}
+
+.verification-info {
+    background: rgba(52, 152, 219, 0.1);
+    border-left: 4px solid var(--secondary-color);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: var(--border-radius);
+}
+
+.step {
+    background: white;
+    border-left: 4px solid var(--accent-color);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: var(--transition);
+}
+
+.step:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.result-group {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.encoded-message {
+    font-family: monospace;
+    background: #f8f9fa;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.copy-btn {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.copy-btn:hover {
+    background: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+/* Error Simulation Styles */
+.error-simulation {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-top: 15px;
+}
+
+.message-comparison {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+}
+
+.message-row {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.binary-display {
+    font-family: monospace;
+    font-size: 1.1em;
+    letter-spacing: 1px;
+    background: white;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    flex-grow: 1;
+}
+
+.bit {
+    background: #e3f2fd;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: var(--primary-color);
+}
+
+.bit-changed {
+    background: #ffebee;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: var(--error-color);
+    font-weight: bold;
+}
+
+.verify-btn {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.verify-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);
+}
+
+.verification-result {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: var(--border-radius);
+}
+
+.verification-result.success {
+    background: #e8f5e9;
+    border-left: 4px solid var(--success-color);
+}
+
+.verification-result.error {
+    background: #ffebee;
+    border-left: 4px solid var(--error-color);
+}
+
+/* Disabled state styling for inputs */
+input:disabled,
+select:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+    opacity: 0.8;
+    border-color: #dee2e6;
+}
+
+/* Smooth hide/show to avoid layout jerks */
+.smooth-toggle {
+    transition: max-height 0.45s cubic-bezier(.2,.9,.2,1),
+                opacity 0.35s ease, transform 0.35s ease;
+    overflow: hidden;
+}
+
+.smooth-hidden {
+    max-height: 0 !important;
+    opacity: 0 !important;
+    transform: translateY(-4px);
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.smooth-shown {
+    max-height: 2000px; /* large enough to contain content */
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+}
+
+/* Small utility to reduce abrupt layout jumps for sections */
+.section-card {
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    will-change: transform;
+}
+
+/* Scroll behavior for html and body */
+html, body {
+    scroll-behavior: smooth;
+    scroll-padding-top: 20px;
+    overflow-x: hidden;
+}
+
+body {
+    min-height: 100vh;
+}
+
+/* Button highlight animation */
+@keyframes buttonHighlight {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(48, 79, 254, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(48, 79, 254, 0.4);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(48, 79, 254, 0.2);
+    }
+}
+
+.button-highlight {
+    animation: buttonHighlight 1s ease;
+}
+
+/* Input highlight animation */
+@keyframes inputHighlight {
+    0% {
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 2px rgba(48, 79, 254, 0.1);
+    }
+    50% {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 4px rgba(48, 79, 254, 0.2);
+    }
+    100% {
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 2px rgba(48, 79, 254, 0.1);
+    }
+}
+
+.input-highlight {
+    animation: inputHighlight 1s ease;
+}
