@@ -150,26 +150,107 @@
         <section class="tab-panel smooth-toggle smooth-hidden" id="algorithm-panel" role="tabpanel" aria-labelledby="tab-algo">
             <div class="result-box">
                 <h2>Algorithm</h2>
-                <p>Algorithm details go here...<br><br>
-                Example (pseudocode):</p>
-                <pre style="white-space:pre-wrap; font-family:inherit;">// Pseudocode for CRC calculation
-    1. Convert input to binary
-    2. Append (degree) zeros to the binary data
-    3. While the working data length >= divisor length:
-       - If leading bit is 1: XOR with divisor and replace leading bits
-       - Else: shift left (drop leading 0)
-       - Record step for visualization
-    4. Remainder after division is the CRC
-    5. Append remainder to original data to form encoded message
-                </pre>
+                <article class="markdown">
+                    <h3>Problem setup</h3>
+                    <ul>
+                        <li>Message bits: <code>M</code> (any format is first converted to binary).</li>
+                        <li>Generator polynomial (binary): <code>G</code>, length <code>m</code> and degree <code>m − 1</code>.</li>
+                        <li>Division is in GF(2): addition/subtraction is XOR; no carries.</li>
+                    </ul>
+
+                    <h3>Encoding (Sender)</h3>
+                    <ol>
+                        <li>Convert input to binary: <code>M</code>.</li>
+                        <li>Pad with <code>m − 1</code> zeros: <code>P = M · 2<sup>m−1</sup></code> (append <code>m−1</code> zeros).</li>
+                        <li>Perform long division of <code>P</code> by <code>G</code> bit-by-bit:
+                            <ul>
+                                <li>Slide a window of size <code>m</code> from left to right.</li>
+                                <li>If the window’s left bit is <code>1</code>, XOR the window with <code>G</code> and write back.</li>
+                                <li>If it is <code>0</code>, just advance the window (no XOR).</li>
+                            </ul>
+                        </li>
+                        <li>The final <code>m − 1</code> bits are the remainder <code>R</code> (the CRC).</li>
+                        <li>Encoded message: <code>M || R</code>.</li>
+                    </ol>
+
+                    <details>
+                        <summary>Pseudocode (bitwise division)</summary>
+<pre><code>input: M (binary string), G (binary string), m = len(G)
+# pad
+P = M + "0" * (m-1)
+W = list(P)  # mutable working array
+for i in range(0, len(P) - m + 1):
+    if W[i] == '1':
+        for j in range(0, m):
+            W[i+j] = '0' if (W[i+j] == G[j]) else '1'  # XOR
+# remainder is last m-1 bits
+R = ''.join(W[len(P)-(m-1):])
+encoded = M + R
+</code></pre>
+                    </details>
+
+                    <h3>Verification (Receiver)</h3>
+                    <ol>
+                        <li>Receive <code>M' = M || R</code> and choose <code>G</code> (defaults to the sender’s choice here).</li>
+                        <li>Run the same division on <code>M'</code> by <code>G</code>.</li>
+                        <li>If the final remainder is all zeros, the frame is considered valid; otherwise an error is detected.</li>
+                    </ol>
+
+                    <h3>Notes and edge cases</h3>
+                    <ul>
+                        <li><strong>All-zero message</strong>: still yields a deterministic CRC based on <code>G</code>.</li>
+                        <li><strong>Leading zeros</strong> in <code>M</code> are preserved; division is positional.</li>
+                        <li><strong>Custom polynomials</strong> should be binary and start with <code>1</code> to define degree <code>m−1</code>.</li>
+                        <li>Time complexity is <code>O(n · m)</code>, for message length <code>n</code> and polynomial length <code>m</code>.</li>
+                    </ul>
+                </article>
             </div>
         </section>
 
         <section class="tab-panel smooth-toggle smooth-hidden" id="working-panel" role="tabpanel" aria-labelledby="tab-working">
             <div class="result-box">
                 <h2>Working Principle</h2>
-                <p>Working principle explanation goes here...<br><br>
-                The CRC generator treats the binary message as a polynomial, performs binary polynomial division using the generator polynomial and uses the remainder as the CRC. The receiver performs the same division on the received message; a zero remainder indicates no detected errors.</p>
+                <article class="markdown">
+                    <h3>CRC as polynomial arithmetic over GF(2)</h3>
+                    <p>
+                        A binary string (e.g., <code>11001</code>) is viewed as a polynomial with coefficients in GF(2),
+                        e.g., <code>1·x⁴ + 1·x³ + 0·x² + 0·x + 1</code>. The generator <code>G</code> is also a polynomial
+                        whose highest coefficient is <code>1</code> (so its degree is well-defined).
+                    </p>
+                    <p>
+                        Division is standard long division but with XOR as add/subtract. There are no carries in GF(2).
+                        Each time the current window’s leading bit is <code>1</code>, we XOR the window with the generator.
+                        When it’s <code>0</code>, we just advance to the next position. Our visualizer shows this as
+                        “window → generator → underline → XOR result”, aligned under the dividend.
+                    </p>
+
+                    <h3>Why append zeros before division?</h3>
+                    <p>
+                        Appending <code>m−1</code> zeros is equivalent to multiplying the message polynomial by <code>x<sup>m−1</sup></code>,
+                        reserving space for the remainder produced by the division. The remainder bits overwrite these zeros and
+                        become the CRC appended at the sender.
+                    </p>
+
+                    <h3>Sender/Receiver symmetry</h3>
+                    <ul>
+                        <li><strong>Sender</strong>: computes remainder <code>R</code> from <code>M·x<sup>m−1</sup></code> ÷ <code>G</code>, transmits <code>M || R</code>.</li>
+                        <li><strong>Receiver</strong>: divides <code>M || R</code> by the same <code>G</code>. If the remainder is all zeros, the frame passes; otherwise it’s flagged.</li>
+                    </ul>
+
+                    <h3>Error detection intuition</h3>
+                    <p>
+                        If noise flips some bits producing error polynomial <code>E(x)</code>, the received polynomial becomes
+                        <code>M(x)·x<sup>m−1</sup> + R(x) + E(x)</code>. By construction, <code>M(x)·x<sup>m−1</sup> + R(x)</code> is divisible by <code>G(x)</code>,
+                        so the receiver’s remainder equals <code>E(x) mod G(x)</code>. Well-chosen standard polynomials detect many common error patterns
+                        (all single-bit errors, most short burst errors, and more).
+                    </p>
+
+                    <h3>Limitations</h3>
+                    <ul>
+                        <li>CRC provides integrity, not authenticity; it is not a cryptographic MAC.</li>
+                        <li>Some rare error patterns are undetected depending on <code>G</code>; standards choose <code>G</code> to minimize these.</li>
+                    </ul>
+                </article>
             </div>
         </section>
     </div>

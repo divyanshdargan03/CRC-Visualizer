@@ -675,3 +675,110 @@ html.dark .verification-result.error {
     color: var(--error-color) !important;
     border-left-color: var(--error-color) !important;
 }
+
+/* ---------- Markdown content styling for Algorithm & Working tabs ---------- */
+.markdown {
+    line-height: 1.7;
+    color: var(--primary-color);
+}
+.markdown h3 {
+    margin: 12px 0 8px 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+    position: relative;
+    padding-left: 12px;
+}
+.markdown h3::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%; transform: translateY(-50%);
+    width: 4px; height: 18px;
+    background: linear-gradient(180deg, var(--secondary-color), var(--accent-color));
+    border-radius: 2px;
+}
+.markdown p { margin: 8px 0; }
+.markdown ul, .markdown ol { margin: 6px 0 12px 18px; }
+.markdown li { margin: 4px 0; }
+.markdown code {
+    background: rgba(124,77,255,0.08);
+    color: var(--primary-color);
+    border: 1px solid rgba(124,77,255,0.18);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 0.95em;
+}
+.markdown pre {
+    background: linear-gradient(180deg, rgba(124,77,255,0.06), rgba(48,79,254,0.05));
+    border: 1px solid rgba(124,77,255,0.16);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 10px 0 14px 0;
+    overflow-x: auto;
+}
+.markdown pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--primary-color);
+    display: block;
+    white-space: pre;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+.markdown details {
+    margin: 10px 0 12px 0;
+    border: 1px solid rgba(124,77,255,0.16);
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
+}
+.markdown details[open] { box-shadow: 0 10px 22px rgba(0,0,0,0.08); }
+.markdown summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 10px 12px 10px 40px; /* left space for custom caret */
+    background: linear-gradient(135deg, rgba(48,79,254,0.08), rgba(124,77,255,0.08));
+    color: var(--secondary-color);
+    font-weight: 700;
+    position: relative;
+    border-radius: 10px;
+}
+.markdown summary::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-50%) rotate(-45deg); /* chevron pointing right */
+    transition: transform 0.18s ease;
+    opacity: 0.9;
+}
+.markdown details[open] > summary::before {
+    transform: translateY(-50%) rotate(45deg); /* chevron pointing down */
+}
+.markdown summary::-webkit-details-marker { display: none; }
+.markdown details > *:not(summary) { padding: 8px 12px; }
+
+/* Dark mode tweaks for markdown */
+html.dark .markdown code {
+    background: rgba(154,124,255,0.12);
+    border-color: rgba(154,124,255,0.28);
+    color: var(--primary-color);
+}
+html.dark .markdown pre {
+    background: linear-gradient(180deg, rgba(154,124,255,0.08), rgba(48,79,254,0.07));
+    border-color: rgba(154,124,255,0.28);
+}
+html.dark .markdown details {
+    border-color: rgba(154,124,255,0.28);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
+}
+html.dark .markdown summary {
+    background: linear-gradient(135deg, rgba(48,79,254,0.18), rgba(154,124,255,0.18));
+    color: var(--secondary-color);
+}
