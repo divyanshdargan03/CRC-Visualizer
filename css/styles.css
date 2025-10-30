@@ -45,6 +45,202 @@ body {
     gap: 20px;
 }
 
+/* Tab navigation styles */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin: 18px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.tab-button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,252,0.95));
+    color: var(--primary-color);
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.tab-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+.tab-button.active {
+    background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+    color: white;
+    border-color: rgba(0,0,0,0.04);
+    box-shadow: 0 8px 20px rgba(48,79,254,0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+ .tab-button {
+    background: #0f1724;
+    color: rgb(255, 255, 255);
+    border-color: rgba(0,0,0,0.04);
+    box-shadow: 0 8px 20px rgba(48,79,254,0.12);
+}   
+}
+
+.tab-panel { margin-top: 10px; }
+
+/* Make sure hidden panels are visually removed but keep smooth toggle helpers */
+.tab-panel.smooth-hidden, .tab-panel.hidden { display: none !important; }
+
+/* Long-division visualization (monospace, aligned rows) */
+.long-division {
+    background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    overflow-x: auto;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+.long-division pre {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--primary-color);
+    white-space: pre;
+}
+
+/* Highlight divisor and xor rows for clarity */
+.long-division pre span.divisor { color: var(--accent-color); }
+.long-division pre span.xor { color: var(--secondary-color); }
+
+/* On small screens, reduce font-size so long lines wrap less aggressively */
+@media (max-width: 480px) {
+    .long-division pre { font-size: 12px; }
+}
+
+/* Enhanced long-division styling matching site theme */
+.long-division {
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 16px 0 24px 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.55;
+    white-space: nowrap; /* preserve alignment */
+    color: var(--primary-color);
+}
+.ld-header {
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-bottom: 6px;
+}
+.ld-rule { height: 6px; border-top: 2px solid rgba(124,124,124,0.06); margin: 10px 0; }
+.ld-rule.small { border-top-width: 1px; margin: 8px 0; opacity: 0.7 }
+.ld-meta { color: var(--primary-color); margin: 6px 0 }
+.ld-label { color: var(--secondary-color); font-weight:700; display:inline-block; width:110px }
+.ld-value { font-family: monospace; color: var(--primary-color) }
+.ld-pre { margin: 3px 0 }
+.ld-divisor-inline { color: var(--accent-color); font-weight:700 }
+.ld-divisor { color: var(--accent-color); font-weight:700 }
+.ld-underline { color: rgba(124,124,124,0.45) }
+.ld-xor { color: var(--secondary-color); font-weight:700 }
+.ld-snap { color: var(--primary-color); display:block }
+.ld-shift { color: rgba(200,200,200,0.6) }
+.ld-remainder-row { margin-top: 10px }
+.ld-remainder { color: var(--accent-color); font-weight:800; font-family: monospace }
+/* New: colorized pieces inside the preformatted block */
+.ld-dividend { color: var(--primary-color); font-weight: 800 }
+.ld-rule-text { color: rgba(124,124,124,0.45) }
+.ld-remainder-label { color: var(--accent-color); font-weight: 700 }
+.ld-window { color: var(--primary-color); font-weight: 700 }
+
+/* Small screens adjustments */
+@media (max-width: 720px) {
+    .ld-label { width: 90px }
+    .long-division { padding: 12px }
+}
+
+/* Bit-level styling for per-bit grid */
+.ld-row { font-family: monospace; margin: 6px 0; }
+.ld-bits { display: inline-flex; gap: 0.35ch; align-items: center }
+.ld-bit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0.9ch;
+    width: 0.9ch;
+    text-align: center;
+    padding: 0 0.35ch;
+    margin-right: 0;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.01);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+.ld-bit.divisor {
+    background: linear-gradient(135deg, rgba(124,77,255,0.08), rgba(124,77,255,0.03));
+    color: var(--accent-color);
+    font-weight: 800;
+}
+.ld-bit.xor {
+    background: linear-gradient(135deg, rgba(48,79,254,0.06), rgba(124,77,255,0.02));
+    color: var(--secondary-color);
+    font-weight: 800;
+}
+.ld-spacer { display:inline-block }
+.ld-uline { display:inline-block; width:1ch; text-align:center; color:rgba(124,124,124,0.5) }
+.ld-shift { color: rgba(200,200,200,0.7); font-style:italic }
+.ld-sep { margin: 0 6px; color: rgba(200,200,200,0.6) }
+
+/* Make remainder visually distinct */
+.ld-remainder { background: linear-gradient(135deg, rgba(124,77,255,0.06), rgba(124,77,255,0.02)); padding: 4px 8px; border-radius: 6px; }
+
+/* Ensure long-division area is responsive and allows horizontal scroll */
+.long-division { overflow-x: auto; }
+/* Make <pre> look consistent with site typography */
+.long-division pre {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    letter-spacing: 0.01em;
+    tab-size: 4;
+    -moz-tab-size: 4;
+    font-variant-ligatures: none;
+}
+
+/* Dark mode subtle border/contrast */
+html.dark .long-division {
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+}
+/* Scrollbar styling to match theme (WebKit) */
+.long-division::-webkit-scrollbar { height: 10px }
+.long-division::-webkit-scrollbar-track { background: transparent }
+.long-division::-webkit-scrollbar-thumb { background: rgba(124,77,255,0.18); border-radius: 6px }
+.long-division { -webkit-overflow-scrolling: touch }
+
+/* Ensure form controls and buttons align consistently across sections */
+#crc-generator-panel .form-group {
+    max-width: 100%; /* avoid accidental width limits from other rules */
+}
+
+#crc-generator-panel input[type="text"],
+#crc-generator-panel select,
+#crc-generator-panel .primary-btn,
+#crc-generator-panel .secondary-btn,
+#crc-generator-panel .verify-btn {
+    box-sizing: border-box; /* ensure padding is included in width calculation */
+    width: 100%;
+}
+
+/* Reduce unexpected margins around full-width buttons inside the error simulation */
+.error-simulation-section .secondary-btn,
+.error-simulation .verify-btn {
+    margin: 12px 0 0 0;
+}
+
 .header-controls {
     display: flex;
     gap: 10px;

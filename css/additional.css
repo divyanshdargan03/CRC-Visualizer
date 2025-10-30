@@ -166,7 +166,9 @@ select:disabled {
 }
 
 .smooth-shown {
-    max-height: 2000px; /* large enough to contain content */
+    /* Allow the shown element to expand to its full height (no fixed cap).
+       Using 'none !important' avoids clipping when many steps are rendered. */
+    max-height: none !important;
     opacity: 1;
     transform: none;
     visibility: visible;

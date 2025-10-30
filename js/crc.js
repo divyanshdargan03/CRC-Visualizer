@@ -30,47 +30,66 @@ class CRCCalculator {
 
     // Perform binary division and return steps
     binaryDivision(dividend, divisor) {
-        let steps = [];
-        let workingData = dividend;
+        // We'll perform a long-division style bitwise division and capture
+        // snapshots aligned to positions so the UI can render a visual division.
+        const steps = [];
+        const working = dividend.split(''); // array of '0'/'1'
+        const n = working.length;
+        const m = divisor.length;
         let quotient = '';
-        
-        // Record initial state
+
+        // Record initial padded dividend
         steps.push({
-            step: 'Initial data',
-            dividend: workingData,
+            type: 'start',
+            index: 0,
+            windowBefore: working.join(''),
             divisor: divisor,
-            operation: 'Start'
+            xorResult: null,
+            workingSnapshot: working.join('')
         });
 
-        while (workingData.length >= divisor.length) {
-            if (workingData[0] === '1') {
+        // Perform division: iterate over each possible alignment
+        for (let i = 0; i <= n - m; i++) {
+            const window = working.slice(i, i + m).join('');
+            if (window[0] === '1') {
+                // XOR with divisor
+                const xorResult = this.xorStrings(window, divisor);
+                // Apply xor result into working array
+                for (let j = 0; j < m; j++) {
+                    working[i + j] = xorResult[j];
+                }
                 quotient += '1';
-                let xorResult = this.xorStrings(workingData.slice(0, divisor.length), divisor);
-                workingData = xorResult + workingData.slice(divisor.length);
-                
+
                 steps.push({
-                    step: 'XOR operation',
-                    dividend: workingData,
+                    type: 'xor',
+                    index: i,
+                    windowBefore: window,
                     divisor: divisor,
-                    operation: 'XOR'
+                    xorResult: xorResult,
+                    workingSnapshot: working.join('')
                 });
             } else {
+                // No XOR — this is effectively a shift step
                 quotient += '0';
-                workingData = workingData.slice(1);
-                
                 steps.push({
-                    step: 'Shift',
-                    dividend: workingData,
+                    type: 'shift',
+                    index: i,
+                    windowBefore: window,
                     divisor: divisor,
-                    operation: 'Shift'
+                    xorResult: null,
+                    workingSnapshot: working.join('')
                 });
             }
         }
 
+        // Remainder is the last m-1 bits of working
+        const remainder = working.slice(n - (m - 1)).join('') || '';
+
         return {
-            remainder: workingData,
+            remainder: remainder,
             quotient: quotient,
-            steps: steps
+            steps: steps,
+            padded: dividend
         };
     }
 
@@ -139,6 +158,79 @@ function smoothScrollTo(element, offset = 0) {
 
 document.addEventListener('DOMContentLoaded', function() {
     const calculator = new CRCCalculator();
+    let receiverPolyInitialized = false;
+    
+    // Shared helpers for rendering the long-division in both Sender and Receiver modes
+    function escapeHtml(str) {
+        return (str + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // Render a colorized, preformatted long division using spans for styling
+    // res: result from calculator.binaryDivision
+    // encodedMsg: optional encoded message (sender mode); pass null/undefined in receiver
+    // polynomialStr: the binary string of the generator polynomial
+    function renderLongDivision(res, encodedMsg, polynomialStr) {
+        const padded = res.padded || '';
+        const divisorStr = polynomialStr;
+        const m = divisorStr.length;
+        const leftPad = 8; // spaces before the initial divisor
+
+        const calcWidth = Math.max(leftPad + divisorStr.length + 3 + padded.length, 48);
+        const rule = '─'.repeat(calcWidth);
+
+        // helper to wrap a text segment in a span with class
+        const wrap = (cls, txt) => `<span class="${cls}">${escapeHtml(txt)}</span>`;
+
+        const htmlLines = [];
+        htmlLines.push(wrap('ld-header', 'CRC Division Process'));
+        htmlLines.push(wrap('ld-rule-text', rule));
+        htmlLines.push(`${wrap('ld-label','Dividend :')} ${wrap('ld-value', padded)}`);
+        htmlLines.push(`${wrap('ld-label','Divisor  :')} ${wrap('ld-divisor', divisorStr)}`);
+        htmlLines.push(wrap('ld-rule-text', rule));
+
+        // Division layout line: [spaces][divisor] ) [dividend]
+        const initialLine = ' '.repeat(leftPad)
+            + wrap('ld-divisor', divisorStr)
+            + ' ) '
+            + wrap('ld-dividend', padded);
+        htmlLines.push(initialLine);
+
+        const startCol = leftPad + divisorStr.length + 3; // column where dividend starts
+
+        // Only XOR steps are shown
+        const xorSteps = res.steps.filter(s => s.type === 'xor');
+        xorSteps.forEach((step, idx) => {
+            const indent = ' '.repeat(startCol + step.index);
+            // show the current window being operated on (before XOR)
+            htmlLines.push(indent + wrap('ld-window', step.windowBefore));
+            // divisor under current window
+            htmlLines.push(indent + wrap('ld-divisor', step.divisor));
+            // underline under divisor bits
+            htmlLines.push(indent + wrap('ld-underline', '─'.repeat(m)));
+            // xor result one column to the right
+            let xorContent = wrap('ld-xor', step.xorResult);
+            htmlLines.push(' '.repeat(startCol + step.index + 1) + xorContent);
+        });
+
+        // Add a dedicated remainder line aligned to the right under the dividend
+        if (res.remainder && res.remainder.length > 0) {
+            const rlen = res.remainder.length; // typically m-1
+            const indentR = startCol + (padded.length - rlen);
+            const remLine = ' '.repeat(Math.max(indentR, 0))
+                + wrap('ld-remainder', res.remainder)
+                + '   ' + wrap('ld-remainder-label', '← remainder');
+            htmlLines.push(remLine);
+        }
+
+        htmlLines.push(wrap('ld-rule-text', rule));
+        htmlLines.push(`${wrap('ld-label','Remainder :')} ${wrap('ld-remainder', res.remainder || '')}`);
+        if (encodedMsg) {
+            htmlLines.push(`${wrap('ld-label','CRC Code  :')} ${wrap('ld-value', encodedMsg)}`);
+        }
+        htmlLines.push(wrap('ld-rule-text', rule));
+
+        return `<div class="long-division"><pre>${htmlLines.join('\n')}</pre></div>`;
+    }
     
     // Elements
     const inputFormat = document.getElementById('inputFormat');
@@ -175,16 +267,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update UI based on mode
     function updateUI() {
         const isReceiver = mode.value === 'receiver';
-        const isCustomPoly = polynomialType.value === 'custom';
-
         const customDiv = document.getElementById('customPolyDiv');
         const binaryConvWrapper = binaryConversion ? binaryConversion.parentElement : null;
         const errorSection = document.querySelector('.error-simulation-section');
 
         if (isReceiver) {
-            // In receiver mode, lock the polynomial selection and show binary-only input
-            polynomialType.disabled = true;
-            toggleSection(customDiv, false);
+            // Receiver mode: force binary input, but allow changing polynomial (default from sender)
             inputFormat.value = 'binary';
             inputFormat.disabled = true;
             inputData.placeholder = 'Enter the received binary message';
@@ -192,20 +280,31 @@ document.addEventListener('DOMContentLoaded', function() {
             // Hide binary conversion in receiver mode
             toggleSection(binaryConvWrapper, false);
 
-            // Try to use the same polynomial that was used for encoding
-            const lastUsedPoly = localStorage.getItem('lastUsedPolynomial');
-            if (lastUsedPoly) {
-                polynomialType.value = lastUsedPoly;
+            // Default polynomial from sender only once when entering receiver
+            if (!receiverPolyInitialized) {
+                const lastUsedPoly = localStorage.getItem('lastUsedPolynomial');
+                if (lastUsedPoly) {
+                    polynomialType.value = lastUsedPoly;
+                }
+                const lastPolyValue = localStorage.getItem('lastPolynomialValue');
+                if (polynomialType.value === 'custom' && lastPolyValue) {
+                    if (!customPoly.value) customPoly.value = lastPolyValue;
+                }
+                receiverPolyInitialized = true;
             }
+            polynomialType.disabled = false;
 
-            // Update labels to show we're using the same polynomial
+            // Show/hide custom input based on current selection
+            toggleSection(customDiv, polynomialType.value === 'custom');
+
+            // Update label to reflect default-from-sender but editable
             const polyLabel = document.querySelector('label[for="polynomialType"]');
-            polyLabel.textContent = 'Generator Polynomial (same as sender):';
+            polyLabel.textContent = 'Generator Polynomial (defaulted from sender):';
         } else {
-            // In sender mode, enable all options
+            // Sender mode: enable all
             polynomialType.disabled = false;
             inputFormat.disabled = false;
-            toggleSection(customDiv, isCustomPoly);
+            toggleSection(customDiv, polynomialType.value === 'custom');
             inputData.placeholder = 'Enter your data';
 
             // Show binary conversion in sender mode
@@ -214,6 +313,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Reset label
             const polyLabel = document.querySelector('label[for="polynomialType"]');
             polyLabel.textContent = 'Generator Polynomial:';
+
+            // Leaving receiver mode — allow re-initialization next time
+            receiverPolyInitialized = false;
         }
 
         // Update other UI elements (error simulation section)
@@ -311,18 +413,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (mode.value === 'sender') {
                 // Calculate CRC
                 const result = calculator.calculateCRC(binaryInput, polynomial);
-                
-                // Display steps
-                crcSteps.innerHTML = result.steps.map(step => `
-                    <div class="step">
-                        <strong>${step.step}</strong><br>
-                        Data: ${step.dividend}<br>
-                        ${step.operation === 'XOR' ? `XOR with: ${step.divisor}` : ''}
-                    </div>
-                `).join('');
 
                 const encodedMessage = binaryInput + result.remainder;
-                
+                crcSteps.innerHTML = renderLongDivision(result, encodedMessage, polynomial);
+
                 // Display final result with copy button
                 finalResult.innerHTML = `
                     <div class="success">
@@ -362,19 +456,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 polyBinary.innerHTML = `Binary: ${polynomial}`;
                 toggleSection(document.getElementById('polynomialVisual'), true);
                 
-                // Show division steps
-                crcSteps.innerHTML = `
-                    <div class="verification-info">
-                        <strong>Verification Process:</strong><br>
-                        Using polynomial: ${calculator.polynomialToMath(polynomial)}<br>
-                    </div>
-                ` + result.steps.map(step => `
-                    <div class="step">
-                        <strong>${step.step}</strong><br>
-                        Data: ${step.dividend}<br>
-                        ${step.operation === 'XOR' ? `XOR with: ${step.divisor}` : ''}
-                    </div>
-                `).join('');
+                // Show division steps (same long-division style as sender)
+                crcSteps.innerHTML = renderLongDivision(result, null, polynomial);
                 
                 // Check if remainder is zero
                 const isValid = result.remainder === '0'.repeat(result.remainder.length);

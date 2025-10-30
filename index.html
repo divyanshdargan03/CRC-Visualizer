@@ -57,6 +57,15 @@
                 <div><strong>Professor:</strong> Dr. Swaminathan A</div>
             </div>
         
+        <!-- Tab navigation -->
+        <nav class="tabs" role="tablist" aria-label="Main navigation tabs">
+            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="crc-generator-panel" id="tab-crc">CRC Generator</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="algorithm-panel" id="tab-algo">Algorithm</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="working-panel" id="tab-working">Working Principle</button>
+        </nav>
+
+        <!-- Tab panels -->
+        <section class="tab-panel" id="crc-generator-panel" role="tabpanel" aria-labelledby="tab-crc">
         <div class="input-section">
             <div class="form-group">
                 <label for="inputFormat">Input Format:</label>
@@ -136,7 +145,86 @@
                 <div id="polyBinary"></div>
             </div>
         </div>
+        </section>
+
+        <section class="tab-panel smooth-toggle smooth-hidden" id="algorithm-panel" role="tabpanel" aria-labelledby="tab-algo">
+            <div class="result-box">
+                <h2>Algorithm</h2>
+                <p>Algorithm details go here...<br><br>
+                Example (pseudocode):</p>
+                <pre style="white-space:pre-wrap; font-family:inherit;">// Pseudocode for CRC calculation
+    1. Convert input to binary
+    2. Append (degree) zeros to the binary data
+    3. While the working data length >= divisor length:
+       - If leading bit is 1: XOR with divisor and replace leading bits
+       - Else: shift left (drop leading 0)
+       - Record step for visualization
+    4. Remainder after division is the CRC
+    5. Append remainder to original data to form encoded message
+                </pre>
+            </div>
+        </section>
+
+        <section class="tab-panel smooth-toggle smooth-hidden" id="working-panel" role="tabpanel" aria-labelledby="tab-working">
+            <div class="result-box">
+                <h2>Working Principle</h2>
+                <p>Working principle explanation goes here...<br><br>
+                The CRC generator treats the binary message as a polynomial, performs binary polynomial division using the generator polynomial and uses the remainder as the CRC. The receiver performs the same division on the received message; a zero remainder indicates no detected errors.</p>
+            </div>
+        </section>
     </div>
+    <script>
+        // Simple tab switching logic
+        (function() {
+            function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+            function $all(sel, ctx) { return Array.from((ctx || document).querySelectorAll(sel)); }
+
+            const tabButtons = $all('.tab-button');
+            const tabPanels = $all('.tab-panel');
+
+            function activateTab(button) {
+                const targetId = button.getAttribute('aria-controls');
+
+                // deactivate all buttons
+                tabButtons.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                });
+
+                // hide all panels
+                tabPanels.forEach(p => {
+                    p.classList.add('smooth-hidden');
+                    p.classList.remove('smooth-shown');
+                    p.setAttribute('hidden', '');
+                });
+
+                // activate clicked button
+                button.classList.add('active');
+                button.setAttribute('aria-selected', 'true');
+
+                // show target panel
+                const panel = document.getElementById(targetId);
+                if (panel) {
+                    panel.classList.remove('smooth-hidden');
+                    panel.classList.add('smooth-shown');
+                    panel.removeAttribute('hidden');
+                }
+            }
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    activateTab(btn);
+                    // scroll to top of container when switching tabs on small screens
+                    const container = document.querySelector('.container');
+                    if (container) container.scrollIntoView({behavior: 'smooth'});
+                });
+            });
+
+            // Initialize: ensure only the active panel is visible
+            const initial = document.querySelector('.tab-button.active') || tabButtons[0];
+            if (initial) activateTab(initial);
+        })();
+    </script>
     <script src="js/crc.js"></script>
 </body>
 </html>
