@@ -401,8 +401,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalClose = modal ? modal.querySelector('.modal-close') : null;
     const backdrop = modal ? modal.querySelector('.modal-backdrop') : null;
     const modalBody = modal ? modal.querySelector('.modal-body') : null;
-    // If present, the Done button inside the developed-by modal
-    const modalDone = modal ? modal.querySelector('#modalDone') : null;
     // capture original body HTML so temporary help content can be restored
     const originalModalBodyHTML = modalBody ? modalBody.innerHTML : '';
 
@@ -509,9 +507,9 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.appendChild(a); a.click(); a.remove();
             URL.revokeObjectURL(url);
         });
-    if(modalClose) modalClose.addEventListener('click', closeModal);
-    if(backdrop) backdrop.addEventListener('click', closeModal);
-    if(modalDone) modalDone.addEventListener('click', closeModal);
+        if(modalClose) modalClose.addEventListener('click', closeModal);
+        if(backdrop) backdrop.addEventListener('click', closeModal);
+        if(modalDone) modalDone.addEventListener('click', closeModal);
 
         // No file upload behavior — placeholders in HTML can be updated with real image src values later.
     })();
