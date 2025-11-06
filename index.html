@@ -40,21 +40,19 @@
                             </span>
                         </label>
                     </div>
+                    <!-- Header action buttons -->
+                    <div class="header-actions">
+                        <button class="header-btn" id="learnBtn">Learn</button>
+                        <button class="header-btn" id="developedByBtn">Developed by</button>
+                        <button class="header-btn" id="helpBtn">Help</button>
+                        <button class="header-btn" id="downloadBtn">Download</button>
+                    </div>
                 </div>
             </div>
 
             <div class="project-meta">
                 <div><strong>Project:</strong> CRC Visualizer — Computer Networks</div>
-                <div><strong>Student:</strong> Divyansh Dargan (Reg: 24BCE5131)</div>
-                <div>
-                <strong>Student:</strong> Aviskha Talukdar<br>
-                (Reg: 24BCE5100)
-                </div><div>
-                <strong>Student:</strong> Mokshdaa Gupta<br>
-                (Reg: 24BCE5095)
-                </div>
-                
-                <div><strong>Professor:</strong> Dr. Swaminathan A</div>
+                <!-- Student and Professor details moved to "Developed by" panel -->
             </div>
         
         <!-- Tab navigation -->
@@ -64,9 +62,9 @@
             <button class="tab-button" role="tab" aria-selected="false" aria-controls="working-panel" id="tab-working">Working Principle</button>
         </nav>
 
-        <!-- Tab panels -->
-        <section class="tab-panel" id="crc-generator-panel" role="tabpanel" aria-labelledby="tab-crc">
-        <div class="input-section">
+                
+    <section class="tab-panel smooth-toggle smooth-shown" id="crc-generator-panel" role="tabpanel" aria-labelledby="tab-crc">
+    <div class="input-section">
             <div class="form-group">
                 <label for="inputFormat">Input Format:</label>
                 <select id="inputFormat">
@@ -144,8 +142,8 @@
                 <div id="polyMath"></div>
                 <div id="polyBinary"></div>
             </div>
-        </div>
-        </section>
+    </div>
+    </section>
 
         <section class="tab-panel smooth-toggle smooth-hidden" id="algorithm-panel" role="tabpanel" aria-labelledby="tab-algo">
             <div class="result-box">
@@ -254,6 +252,196 @@ encoded = M + R
             </div>
         </section>
     </div>
+
+    <!-- Developed by modal -->
+    <div id="developedModal" class="modal" aria-hidden="true">
+        <div class="modal-backdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="developedTitle" tabindex="-1">
+            <header class="modal-header">
+                <h3 id="developedTitle">Developed by</h3>
+                <button class="modal-close" aria-label="Close developed by">×</button>
+            </header>
+
+            <div class="modal-body">
+                <div class="team-grid">
+                    <!-- Member 1 -->
+                    <div class="team-member">
+                        <!-- Divyansh Dargan photo - place image.png in the repo root or update path -->
+                        <div class="photo-placeholder">
+                            <img class="member-photo" src="image.png" alt="Divyansh Dargan photo" style="width:100%;height:100%;object-fit:cover;border-radius:10px;display:block;" />
+                        </div>
+                        <div class="member-info">
+                            <div class="member-card">
+                                <strong class="member-name">Divyansh Dargan</strong>
+                                <div class="member-reg">Reg: 24BCE5131</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member 2 -->
+                    <div class="team-member">
+                        <div class="photo-placeholder">
+                            <img class="member-photo" src="WhatsApp%20Image%202025-11-06%20at%2012.12.17_067af8af.jpg" alt="Aviskha Talukdar photo" style="width:100%;height:100%;object-fit:cover;border-radius:10px;display:block;" />
+                        </div>
+                        <div class="member-info">
+                            <div class="member-card">
+                                <strong class="member-name">Aviskha <br> Talukdar</strong>
+                                <div class="member-reg">Reg: 24BCE5100</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member 3 -->
+                    <div class="team-member">
+                        <div class="photo-placeholder">
+                            <img class="member-photo" src="WhatsApp%20Image%202025-11-06%20at%2012.21.20_61508a50.jpg" alt="Mokshdaa Gupta photo" style="width:100%;height:100%;object-fit:cover;border-radius:10px;display:block;" />
+                        </div>
+                        <div class="member-info">
+                            <div class="member-card">
+                                <strong class="member-name">Mokshdaa Gupta</strong>
+                                <div class="member-reg">Reg: 24BCE5095</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Guided by / Faculty -->
+                <div class="guided-by" style="margin-top:18px;">
+                    <h4 style="margin:0 0 8px 0;">Guided by</h4>
+                    <div class="team-member">
+                        <div class="photo-placeholder">
+                            <img class="member-photo" src="WhatsApp%20Image%202025-11-05%20at%2014.48.42_f64a3164.jpg" alt="Professor photo" />
+                        </div>
+                        <div class="member-info">
+                            <div class="member-card" style="display:inline-block;">
+                                <strong class="member-name">Dr. Swaminathan A</strong>
+                                <div class="member-reg">Assistant Professor</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer-actions">
+                    <button class="primary-btn" id="modalDone">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Learn modal -->
+    <div id="learnModal" class="modal" aria-hidden="true">
+        <div class="modal-backdrop"></div>
+        <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="learnTitle" tabindex="-1">
+            <header class="modal-header">
+                <h3 id="learnTitle">Learn</h3>
+                <button class="modal-close" aria-label="Close learn">×</button>
+            </header>
+
+            <div class="modal-body learn-body">
+                <div class="learn-list">
+                    <div class="learn-item">
+                        <h4>Materials (selected notes — from Philip Koopman)</h4>
+                        <p>
+                            The following concise notes summarize practical CRC guidance adapted from Philip Koopman's material on checksums and CRCs. These are presented as a quick reference for students using the visualizer:
+                        </p>
+                        <ul>
+                            <li><strong>Purpose:</strong> CRCs are lightweight error-detection codes designed to detect common transmission faults (single-bit errors, most small burst errors, and many patterns of multiple-bit errors) using polynomial arithmetic over GF(2).</li>
+                            <li><strong>How they work (high level):</strong> Treat a binary message as a polynomial, multiply by x^(m-1) (append m−1 zeros), divide by the generator polynomial G(x) using XOR (no carries). The remainder (m−1 bits) is appended as the CRC. The receiver performs the same division; a zero remainder indicates no detected error.</li>
+                            <li><strong>Polynomial selection:</strong> Choosing G(x) is critical — well-known polynomials (CRC-16, CRC-32) are selected for strong detection of typical error patterns. Koopman highlights that some polynomials are better at detecting particular kinds of burst errors and recommends selecting a polynomial that matches the expected error model.</li>
+                            <li><strong>Burst error detection:</strong> A generator of degree m−1 will detect all burst errors of length less than m, with diminishing guarantees for longer bursts depending on the polynomial.</li>
+                            <li><strong>Limitations:</strong> CRCs detect accidental corruption well but do not provide cryptographic integrity or protection against intentional tampering—use cryptographic MACs for that purpose.</li>
+                            <li><strong>Implementation notes:</strong> CRC computation can be implemented as bitwise division or optimized with lookup tables (byte-wise) or hardware shift-registers; Koopman discusses trade-offs between speed, table size, and implementation platform constraints.</li>
+                            <li><strong>Practical tip:</strong> Always document the polynomial (binary and mathematical form), initial/final XOR values, and bit-ordering (LSB/MSB) when sharing CRC-encoded data — mismatches in conventions are a common interoperability source of errors.</li>
+                        </ul>
+                    </div>
+
+                    <div class="learn-item">
+                        <h4>Explain how this project was built</h4>
+                        <p>Step-by-step explanation of the implementation approach used in this visualizer:
+                        <ol>
+                            <li>Input parsing and binary conversion (text/ASCII/hex/decimal).</li>
+                            <li>Polynomial selection and padding of message with zeros.</li>
+                            <li>Bitwise long-division using XOR to compute remainder (CRC).</li>
+                            <li>Visualization rendering: long-division snapshots and remainder highlighting.</li>
+                            <li>Error simulation and verification using the same polynomial.</li>
+                        </ol>
+                        </p>
+                    </div>
+
+                    <div class="learn-item">
+                        <h4>Animated video (topic overview)</h4>
+                        <p>Embedded/linked animated video explaining CRC fundamentals and polynomial division in GF(2).</p>
+                        <div class="video-placeholder">
+                            <iframe src="https://www.youtube.com/embed/A9g6rTMblz4?si=Fe5x7Ok6bMp586PD" title="CRC Explained" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+
+                    <div class="learn-item">
+                        <h4>References</h4>
+                        <p>Key references used for concepts and implementation:</p>
+                        <ul class="references">
+                            <li>Philip Koopman, "Understanding Checksums and Cyclic Redundancy Checks" — concise discussion of CRC design choices and detection properties.</li>
+                            <li>Standard CRC polynomials and documentation (e.g., CRC-16, CRC-32 specifications; relevant RFCs and IEEE papers).</li>
+                            <li>Online tutorials and educational videos on CRC and polynomial long division.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer-actions">
+                    <button class="primary-btn" id="learnDone">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+            <!-- Help modal (detailed usage instructions per assignment image) -->
+            <div id="helpModal" class="modal" aria-hidden="true">
+                <div class="modal-backdrop"></div>
+                <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="helpTitle" tabindex="-1">
+                    <header class="modal-header sticky-header">
+                        <h3 id="helpTitle">Help</h3>
+                        <button class="modal-close" aria-label="Close help">×</button>
+                    </header>
+
+                    <div class="modal-body help-body">
+                        <div class="help-list">
+                            <div class="help-item">
+                                <h4>Overview</h4>
+                                <p>This visualizer helps you learn and experiment with Cyclic Redundancy Checks (CRC). It converts your input to binary, computes a CRC using a chosen generator polynomial, and shows the long-division steps used to compute the remainder. Use the mode selector to switch between encoding (Sender) and verification (Receiver).</p>
+                            </div>
+
+                            <div class="help-item">
+                                <h4>How to provide input</h4>
+                                <p>Choose the input format from the "Input Format" dropdown (Binary, Decimal, Hexadecimal, ASCII, or Text). Then enter the value in the input box. The visualizer will convert the value to binary before computing the CRC. For Receiver mode, paste the full encoded binary message (message + CRC).</p>
+                            </div>
+
+                            <div class="help-item">
+                                <h4>How to run the visualizer</h4>
+                                <p>1) Select a generator polynomial (standard options like CRC-8, CRC-16, CRC-32 or choose Custom and supply a binary polynomial). 2) Choose Mode: <strong>Sender</strong> to compute and append the CRC, or <strong>Receiver</strong> to verify an encoded message. 3) Click <em>Calculate CRC</em>. Results, division steps and the final remainder appear below.</p>
+                            </div>
+
+                            <div class="help-item">
+                                <h4>Recommended workflow</h4>
+                                <ul style="list-style: none; padding-left:0; margin:0;">
+                                    <li>• In Sender mode: enter the original data, pick a polynomial, calculate, then copy/save the encoded message.</li>
+                                    <li>• Optionally use "Simulate Error" to flip bits in the encoded message and observe detection behavior.</li>
+                                    <li>• In Receiver mode: paste the encoded message (message + CRC) and calculate to check whether the remainder is all zeros.</li>
+                                </ul>
+                            </div>
+
+                            <div class="help-item">
+                                <h4>What is processed</h4>
+                                <p>The tool converts your input to a binary string, appends <code>m−1</code> zeros (where <code>m</code> is the polynomial length), and performs bitwise division by the generator polynomial using XOR (no carries). The remainder (the last <code>m−1</code> bits) is the CRC.</p>
+                            </div>
+
+                            <div class="help-item">
+                                <h4>Interpreting results and visualization</h4>
+                                <p>The long-division visualization shows each XOR operation window, the divisor alignment, and the evolving working array until the final remainder is produced. In Receiver mode, an all-zero remainder means no error detected; a non-zero remainder indicates detected corruption. Use the "Final Result" and the remainder line to make this judgment.</p>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer-actions">
+                            <button class="primary-btn" id="helpDone">Done</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
     <script>
         // Simple tab switching logic
         (function() {

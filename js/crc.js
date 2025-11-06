@@ -157,6 +157,11 @@ function smoothScrollTo(element, offset = 0) {
 // NOTE: verifyInReceiverMode is defined inside DOMContentLoaded so it has access to UI variables
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Ensure the page begins at the top after a reload/navigation so users don't land scrolled down
+    try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    } catch (e) { /* ignore if not supported */ }
+
     const calculator = new CRCCalculator();
     let receiverPolyInitialized = false;
     
@@ -388,6 +393,128 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('crc_dark_mode', on ? '1' : '0');
         });
     }
+
+    // Developed by modal handlers
+    (function(){
+        const developedBtn = document.getElementById('developedByBtn');
+    const modal = document.getElementById('developedModal');
+    const modalClose = modal ? modal.querySelector('.modal-close') : null;
+    const backdrop = modal ? modal.querySelector('.modal-backdrop') : null;
+    const modalBody = modal ? modal.querySelector('.modal-body') : null;
+    // If present, the Done button inside the developed-by modal
+    const modalDone = modal ? modal.querySelector('#modalDone') : null;
+    // capture original body HTML so temporary help content can be restored
+    const originalModalBodyHTML = modalBody ? modalBody.innerHTML : '';
+
+        function openModal(){
+            if(!modal) return;
+            modal.setAttribute('aria-hidden','false');
+            document.body.style.overflow = 'hidden';
+            // rely on CSS flex centering; focus the panel after it's rendered
+            try{
+                const panel = modal.querySelector('.modal-panel');
+                // ensure panel scroll is reset and panel is focused for accessibility
+                setTimeout(() => {
+                    if(panel) {
+                        panel.scrollTop = 0;
+                        if (panel.focus) panel.focus();
+                    }
+                }, 8);
+            }catch(e){ /* ignore */ }
+        }
+        function closeModal(){
+            if(!modal) return;
+            modal.setAttribute('aria-hidden','true');
+            document.body.style.overflow = '';
+        }
+
+        if(developedBtn) developedBtn.addEventListener('click', function(){
+            // restore original modal content (in case Help overwrote it previously)
+            if(modalBody) {
+                modalBody.innerHTML = originalModalBodyHTML;
+                // rebind the Done button inside the restored content
+                const restoredDone = modalBody.querySelector('#modalDone');
+                if(restoredDone) restoredDone.addEventListener('click', closeModal);
+            }
+            openModal();
+        });
+        // Learn button -> open Learn modal (do NOT switch to Working Principle tab)
+        const learnBtn = document.getElementById('learnBtn');
+        const learnModal = document.getElementById('learnModal');
+        const learnClose = learnModal ? learnModal.querySelector('.modal-close') : null;
+        const learnBackdrop = learnModal ? learnModal.querySelector('.modal-backdrop') : null;
+        const learnDone = document.getElementById('learnDone');
+
+        function openLearn(){
+            if(!learnModal) return;
+            learnModal.setAttribute('aria-hidden','false');
+            document.body.style.overflow = 'hidden';
+            try{
+                const panel = learnModal.querySelector('.modal-panel');
+                setTimeout(() => {
+                    if(panel) {
+                        panel.scrollTop = 0;
+                        if (panel.focus) panel.focus();
+                    }
+                }, 8);
+            }catch(e){ /* ignore */ }
+        }
+        function closeLearn(){
+            if(!learnModal) return;
+            learnModal.setAttribute('aria-hidden','true');
+            document.body.style.overflow = '';
+        }
+
+        if(learnBtn) learnBtn.addEventListener('click', function(){
+            openLearn();
+        });
+        if(learnClose) learnClose.addEventListener('click', closeLearn);
+        if(learnBackdrop) learnBackdrop.addEventListener('click', closeLearn);
+        if(learnDone) learnDone.addEventListener('click', closeLearn);
+        // Help button -> open the dedicated Help modal
+        const helpBtn = document.getElementById('helpBtn');
+        const helpModalEl = document.getElementById('helpModal');
+        const helpClose = helpModalEl ? helpModalEl.querySelector('.modal-close') : null;
+        const helpBackdrop = helpModalEl ? helpModalEl.querySelector('.modal-backdrop') : null;
+        const helpDone = helpModalEl ? helpModalEl.querySelector('#helpDone') : null;
+
+        function openHelp(){
+            if(!helpModalEl) return;
+            helpModalEl.setAttribute('aria-hidden','false');
+            document.body.style.overflow = 'hidden';
+            try{
+                const panel = helpModalEl.querySelector('.modal-panel');
+                setTimeout(() => { if(panel){ panel.scrollTop = 0; if(panel.focus) panel.focus(); } }, 8);
+            }catch(e){ /* ignore */ }
+        }
+        function closeHelp(){ if(!helpModalEl) return; helpModalEl.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; }
+
+        if(helpBtn) helpBtn.addEventListener('click', function(){ openHelp(); });
+        if(helpClose) helpClose.addEventListener('click', closeHelp);
+        if(helpBackdrop) helpBackdrop.addEventListener('click', closeHelp);
+        if(helpDone) helpDone.addEventListener('click', closeHelp);
+        // Download button -> download encoded message if present
+        const downloadBtn = document.getElementById('downloadBtn');
+        if(downloadBtn) downloadBtn.addEventListener('click', function(){
+            const enc = document.querySelector('.encoded-message');
+            const final = document.getElementById('finalResult');
+            let txt = '';
+            if(enc) txt = enc.textContent.trim();
+            else if(final) txt = final.textContent.trim();
+            if(!txt){ alert('Nothing to download. Generate CRC first.'); return; }
+            const blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'encoded_message.txt';
+            document.body.appendChild(a); a.click(); a.remove();
+            URL.revokeObjectURL(url);
+        });
+    if(modalClose) modalClose.addEventListener('click', closeModal);
+    if(backdrop) backdrop.addEventListener('click', closeModal);
+    if(modalDone) modalDone.addEventListener('click', closeModal);
+
+        // No file upload behavior — placeholders in HTML can be updated with real image src values later.
+    })();
 
     // Calculate CRC
     calculateBtn.addEventListener('click', function() {

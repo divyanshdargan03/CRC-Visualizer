@@ -10,6 +10,11 @@
     --border-radius: 12px;
     --spacing: 24px;
     --transition: all 0.3s ease;
+    /* panel / card variables for consistent theming */
+    --card-bg: rgba(255,255,255,0.95);
+    --panel-text: #071028;
+    --muted-color: #6b7280;
+    --accent-strong: #4f7fe0;
 }
 
 * {
@@ -44,7 +49,6 @@ body {
     justify-content: space-between;
     gap: 20px;
 }
-
 /* Tab navigation styles */
 .tabs {
     display: flex;
@@ -245,6 +249,345 @@ html.dark .long-division {
     display: flex;
     gap: 10px;
     align-items: center;
+}
+
+/* Header inline buttons that visually match site buttons but sit in the header */
+.header-actions {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.header-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    background: linear-gradient(135deg, #6c757d, #495057); /* same as .secondary-btn */
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.header-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Respect theme colors in dark mode - make header buttons more legible */
+html.dark .header-btn {
+    background: linear-gradient(135deg,#22324a,#345a9a);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+}
+
+/* Modal (Developed by) styles */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+}
+.modal[aria-hidden="false"] { display: flex; }
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(2px);
+}
+.modal-panel {
+    position: relative;
+    width: min(980px, 95%);
+    max-height: 90vh;
+    overflow: auto;
+    background: var(--card-bg);
+    color: var(--panel-text);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+    padding: 18px;
+    z-index: 10;
+}
+/* Ensure modal panel centers correctly and remains usable on small screens */
+.modal {
+    padding: 20px; /* give breathing room so centering works on small viewports */
+}
+.modal-panel {
+    display: flex;
+    flex-direction: column;
+    margin: auto; /* enforce centering inside the flex container */
+    max-height: calc(100vh - 40px); /* ensure it fits within viewport with padding */
+}
+.modal-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:12px;
+}
+.modal-panel .sticky-header {
+   /* position: sticky; */
+    top: 0;
+    z-index: 60;
+    background-color: transparent;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+   /* box-shadow: 0 2px 8px rgba(0,0,0,0.06);   */
+}
+html.dark .modal-panel .sticky-header {
+    background-color: rgba(8,12,20,1);
+    border-bottom-color: rgba(255,255,255,0.04);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+}
+.modal-header h3{ margin:0; }
+.modal-close{
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--panel-text);
+}
+.modal-body{ padding: 6px 2px 18px 2px; }
+.team-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+    gap: 18px;
+}
+.team-member{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+}
+.photo-placeholder{
+    width:120px;
+    height:120px;
+    border-radius:12px;
+    background: linear-gradient(135deg,#eef3ff,#dfe7ff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#123;
+    font-weight:700;
+    border: 1px solid rgba(16,24,40,0.06);
+}
+/* Ensure member photos fill their placeholder and are clipped to rounded corners */
+.photo-placeholder img.member-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.member-info{ flex:1; }
+.member-card{
+    background: linear-gradient(135deg,#fff,#f7f7fb);
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid #e6e6ea;
+}
+.member-name{ display:block; font-size:18px; margin-bottom:6px; }
+.member-reg{ color:#666; }
+.upload-btn{ display:inline-block; margin:8px 0; padding:6px 10px; border-radius:8px; background:var(--secondary-color); color:white; cursor:pointer; }
+.photo-input{ display:none; }
+.modal-footer-actions{ margin-top:14px; text-align:right; }
+
+/* Dark mode adjustments for modal */
+html.dark .modal-panel{ background: rgba(8,12,20,0.92); }
+html.dark .photo-placeholder{ background: rgba(255,255,255,0.03); color: var(--primary-color); }
+html.dark .member-card{ background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.04); color:var(--primary-color); }
+html.dark .upload-btn{ background: var(--accent-color); }
+
+/* Modal heading and inner text responsiveness in dark mode */
+html.dark .modal-header h3,
+html.dark .modal-body h4,
+html.dark .member-name,
+html.dark .member-reg {
+    color: var(--primary-color) !important;
+}
+
+/* Responsive font sizing for modal headings */
+.modal-header h3 {
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+}
+.modal-body h4 {
+    font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+}
+
+/* Learn modal specific styles */
+.learn-body { padding: 10px 2px 18px 2px; }
+.learn-list { display: flex; flex-direction: column; gap: 14px; }
+.learn-item { background: var(--card-bg); padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(124,77,255,0.06); box-shadow: 0 6px 16px rgba(16,24,40,0.04); color: var(--panel-text); }
+.learn-item h4 { margin: 0 0 8px 0; font-size: 1.05rem; color: var(--accent-strong); }
+.learn-item p { margin: 0 0 6px 0; color: var(--panel-text); }
+.learn-item .video-placeholder { height: 160px; border-radius: 8px; background: linear-gradient(135deg, #eef3ff, #dfe7ff); display:flex; align-items:center; justify-content:center; color:#123; }
+.references { margin: 6px 0 0 18px; }
+
+html.dark .learn-item { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03)); border-color: rgba(154,124,255,0.18); }
+html.dark .learn-item .video-placeholder { background: rgba(255,255,255,0.03); color: var(--primary-color); }
+
+/* Ensure dark-mode mirrors light-mode styling for Learn items */
+html.dark .learn-list {
+    color: var(--primary-color);
+}
+html.dark .learn-item {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+}
+html.dark .learn-item h4 {
+    /* use a stronger blue in dark mode to match the requested appearance */
+    color: #6EA3FF !important;
+    font-weight: 800;
+}
+html.dark .learn-item p,
+html.dark .learn-item ul,
+html.dark .learn-item ol,
+html.dark .learn-item li {
+    color: var(--primary-color);
+}
+html.dark .learn-item .video-placeholder {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5) inset;
+}
+/* Make list bullets visible in dark mode */
+html.dark .learn-item ul { color: var(--primary-color); }
+html.dark .learn-item ul li::marker { color: var(--primary-color); }
+
+/* Scrollbar styling for modal panels (WebKit + Firefox) */
+.modal-panel {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(124,77,255,0.36) rgba(0,0,0,0.05);
+}
+.modal-panel::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+.modal-panel::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.04);
+    border-radius: 8px;
+}
+.modal-panel::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(124,77,255,0.32), rgba(79,127,224,0.28));
+    border-radius: 8px;
+    border: 3px solid rgba(0,0,0,0.02);
+    background-clip: padding-box;
+}
+
+/* Dark mode scrollbar tweaks */
+html.dark .modal-panel::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+html.dark .modal-panel::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(124,77,255,0.56), rgba(79,127,224,0.44)); border: 3px solid rgba(255,255,255,0.02); }
+
+/* Make learn modal text responsive and theme-aware */
+.learn-item h4 {
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    color: var(--secondary-color);
+    margin-bottom: 8px;
+}
+.learn-item p,
+.learn-item ul,
+.learn-item ol,
+.learn-item li {
+    font-size: clamp(0.95rem, 1.6vw, 1rem);
+    color: var(--primary-color);
+    line-height: 1.5;
+}
+.learn-item ul li, .learn-item ol li { margin: 6px 0; }
+
+/* Ensure lists inside learn items also adapt in dark mode */
+html.dark .learn-item h4 { color: var(--secondary-color); }
+html.dark .learn-item p, html.dark .learn-item ul, html.dark .learn-item ol, html.dark .learn-item li { color: var(--primary-color); }
+
+/* Small screens: add inner padding to modal body so scrollbar does not overlap content */
+@media (max-width: 480px) {
+    .modal-panel { padding: 12px; }
+    .learn-item .video-placeholder { height: 180px; }
+}
+
+/* Prevent learn-item content from overflowing the rounded panel: ensure wrapping and internal padding */
+.modal-panel { box-sizing: border-box; }
+.learn-list, .learn-item { overflow-wrap: anywhere; word-break: break-word; }
+.learn-item { padding-right: 14px; }
+.learn-item ul, .learn-item ol { padding-inline-start: 1.1rem; margin: 8px 0; list-style-position: inside; }
+
+/* Help modal styles (use same visual language as Learn modal but larger centered items) */
+.help-body { padding: 18px 12px 22px 12px; }
+.help-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    align-items: start;
+}
+
+@media (min-width: 900px) {
+    .help-list { grid-template-columns: repeat(2, 1fr); }
+}
+
+.help-item {
+    width: 100%;
+    background: var(--card-bg);
+    padding: 18px 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(79,127,224,0.06);
+    text-align: left;
+    box-shadow: 0 8px 20px rgba(16,24,40,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.help-item h4 {
+    margin: 0;
+    font-size: clamp(1.02rem, 2.4vw, 1.12rem);
+    color: var(--accent-strong);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.help-item h4::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent-strong);
+    display: inline-block;
+}
+
+.help-item p { margin: 0; font-size: clamp(0.96rem, 1.8vw, 1rem); color: var(--panel-text); line-height: 1.5; }
+.help-item ul { margin: 6px 0 0 1rem; padding-left: 1rem; color: var(--panel-text); }
+.help-item li { margin: 6px 0; }
+.help-item .muted { color: var(--muted-color); font-size: 0.95rem; }
+
+html.dark .help-item {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
+    border-color: rgba(255,255,255,0.04);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.45);
+    color: var(--primary-color);
+}
+html.dark .help-item h4::before { background: #6EA3FF; }
+html.dark .help-item p, html.dark .help-item li { color: var(--primary-color); }
+
+@media (max-width: 480px) {
+    .help-item { border-radius: 12px; padding: 14px; }
+}
+
+/* Make embedded video responsive and fill the placeholder */
+.video-placeholder iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 8px;
+    display: block;
 }
 
 .project-meta {
@@ -537,6 +880,10 @@ html.dark {
     --secondary-color: #7c9eff;
     --accent-color: #9a7cff;
     --card-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    /* panel overrides for dark mode */
+    --card-bg: rgba(8,12,20,0.92);
+    --panel-text: var(--primary-color);
+    --muted-color: rgba(230,238,248,0.6);
 }
 
 html.dark body {
