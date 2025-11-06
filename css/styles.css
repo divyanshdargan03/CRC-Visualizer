@@ -873,6 +873,53 @@ select:focus {
     }
 }
 
+/* Mobile header / action buttons responsiveness */
+@media (max-width: 480px) {
+    /* On very small screens stack header content so buttons remain visible */
+    .top-row {
+        gap: 12px;
+        align-items: flex-start;
+        flex-direction: column; /* stack title + controls */
+    }
+    h1 { font-size: 1.6rem; padding-bottom: 12px; text-align: left; }
+
+    /* Allow header action buttons to wrap to multiple lines instead of being clipped;
+       also allow scrolling as a fallback for very narrow viewports. */
+    .header-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+        justify-content: flex-start;
+    }
+    .header-actions::-webkit-scrollbar { height: 6px; }
+
+    .header-btn {
+        padding: 6px 10px;
+        font-size: 13px;
+        border-radius: 10px;
+        min-width: auto;
+        white-space: nowrap;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+        flex: 0 0 auto;
+    }
+
+    /* Make the theme toggle and header actions wrap naturally */
+    .header-controls { display: flex; gap: 8px; align-items: center; width:100%; justify-content: space-between; }
+
+    /* Reduce modal padding slightly for small screens */
+    .modal-panel { padding: 12px; }
+}
+
+/* Slightly larger compact view for small tablets */
+@media (min-width: 481px) and (max-width: 768px) {
+    .header-btn { padding: 8px 10px; font-size: 14px; border-radius: 10px; }
+}
+
 /* Dark mode styles */
 html.dark {
     --background-color: #0f1724;
